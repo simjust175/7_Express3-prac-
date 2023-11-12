@@ -52,9 +52,9 @@ app.get("/", (req, res)=>{
 
 //GET Search
 app.get("/books/", (req, res)=>{
-    let search = req.query.search;
+    let search = req.query.search.toLowerCase();
     let by = req.query.by || "title";
-    let searchedBooks = BOOKS.filter(book => book[by].includes(search));
+    let searchedBooks = BOOKS.filter(book => book[by].toLowerCase().includes(search));
     console.log(searchedBooks);
     res.send(searchedBooks)
 
