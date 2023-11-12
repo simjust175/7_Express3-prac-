@@ -16,7 +16,7 @@ const BOOKS = [
     { "id": 7, "author": "Mr. Someone", "title": "Winnie the pooh"},
     { "id": 8, "author": "Mr. Someone", "title": "Winnie the pooh"},
     { "id": 9, "author": "Mr. Someone", "title": "Winnie the pooh"},
-    { "id": 10, "author": "Mr. Someone", "title": "Winnie the pooh"},
+    { "id": 10, "author": "Mr. Someone", "title": "minnie the pooh"},
     { "id": 11, "author": "Mr. Someone", "title": "Winnie the pooh"},
     { "id": 12, "author": "Mr. Someone", "title": "Winnie the pooh"},
     { "id": 13, "author": "Mr. Someone", "title": "Winnie the pooh"},
@@ -28,6 +28,13 @@ const BOOKS = [
     { "id": 19, "author": "Mr. Someone", "title": "Winnie the pooh"},
 ];
 
+//Post
+app.post("/book", (req, res)=>{
+    let book = req.body;
+    BOOKS.push(book);
+    res.send({"msg": "Book successfully added", book})
+});
+
 
 //Get all
 app.get("/", (req, res)=>{
@@ -35,13 +42,24 @@ app.get("/", (req, res)=>{
 });
 
 //Get with queries
-app.get("/books", (req, res)=>{
-    let limit = parseInt(req.query.limit, 10) || 10;
-    let offset = parseInt(req.query.offset, 10) || 0;
-    let limitedBooks = BOOKS.slice(offset, offset + limit);
-    res.send(limitedBooks)
+// app.get("/books", (req, res)=>{
+//     let limit = parseInt(req.query.limit, 10) || 10;
+//     let offset = parseInt(req.query.offset, 10) || 0;
+//     let limitedBooks = BOOKS.slice(offset, offset + limit);
+//     res.send(limitedBooks)
+
+// })
+
+//GET Search
+app.get("/books/", (req, res)=>{
+    let search = req.query.search;
+    let by = req.query.by || "title";
+    let searchedBooks = BOOKS.filter(book => book[by].includes(search));
+    console.log(searchedBooks);
+    res.send(searchedBooks)
 
 })
+
 //Get (by id)
 app.get("/books/:id", (req, res)=>{
     let id = req.params.id;
