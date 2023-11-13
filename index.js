@@ -90,7 +90,7 @@ app.patch("/books/:id", (req, res)=>{
     let patch = req.body;
     let keys = Object.keys(patch);
     keys.forEach(key => BOOKS[id -1][key] = patch[key])
-    res.send({"msg": "Item successfully patched."})
+    res.send({"msg": "Item successfully patched.", patch})
 });
 
 app.listen(port, ()=>{
