@@ -1,4 +1,6 @@
 const express =require("express");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 const port = 3333;
@@ -6,10 +8,19 @@ const port = 3333;
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+const statusCheck = (res, value) => {
+    if (value.length < 1) {
+        res.status(404);
+        fs.createReadStream(path.join("./Error/error.html")).pipe(res);
+    } else {
+        res.status(200);
+    }
+}
+
 const BOOKS = [
-    { "id": 1, "author": "Mr. Someone", "title": "Winnie the pooh"},
+    { "id": 1, "author": "Walt Disney", "title": "Mickie mouse"},
     { "id": 2, "author": "Mr. Someone", "title": "Winnie the pooh"},
-    { "id": 3, "author": "Mr. Someone", "title": "Winnie the pooh"},
+    { "id": 3, "author": "H.A. Ray", "title": "curious george"},
     { "id": 4, "author": "Mr. Someone", "title": "Winnie the pooh"},
     { "id": 5, "author": "Mr. Someone", "title": "Winnie the pooh"},
     { "id": 6, "author": "Mr. Someone", "title": "Winnie the pooh"},
@@ -32,17 +43,21 @@ const BOOKS = [
 app.post("/book", (req, res)=>{
     let book = req.body;
     BOOKS.push(book);
-    res.send({"msg": "Book successfully added", book})
+    let msg = {"msg": "Book successfully added", book}
+    console.log(msg);
+    res.send(msg)
 });
 
 
 //Get all
 app.get("/", (req, res)=>{
+    statusCheck(res, BOOKS);
     res.send(BOOKS);
 });
 
 //Get with queries
 app.get("/books", (req, res)=>{
+    statusCheck(res, BOOKS);
     let limit = parseInt(req.query.limit, 10) || 10;
     let offset = parseInt(req.query.offset, 10) || 0;
     let limitedBooks = BOOKS.slice(offset, offset + limit);
@@ -52,6 +67,7 @@ app.get("/books", (req, res)=>{
 
 //GET with Search
 app.get("/books/search", (req, res)=>{
+    statusCheck(res, BOOKS);
     let q = req.query.q.toLowerCase();
     let by = req.query.by || "title";
     let searchedBooks = BOOKS.filter(book => book[by].toLowerCase().includes(q)) || BOOKS;
@@ -62,8 +78,10 @@ app.get("/books/search", (req, res)=>{
 //Get (by id)
 app.get("/books/:id", (req, res)=>{
     let id = req.params.id;
+    statusCheck(res, id); 
     let currentBook = BOOKS[id -1];
-    console.log(currentBook);
+    console.log(`CurrentBook: ${currentBook}`);
+    res.status(200);
     res.send(currentBook);
 })
 
