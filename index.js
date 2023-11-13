@@ -37,7 +37,7 @@ app.post("/book", (req, res)=>{
 
 
 //Get all
-app.get("/", (req, res)=>{
+app.get("/books", (req, res)=>{
     res.send(BOOKS);
 });
 
@@ -50,12 +50,11 @@ app.get("/", (req, res)=>{
 
 // })
 
-//GET Search
-app.get("/books/", (req, res)=>{
-    let search = req.query.search.toLowerCase();
+//GET with Search
+app.get("/books/search", (req, res)=>{
+    let q = req.query.q.toLowerCase();
     let by = req.query.by || "title";
-    let searchedBooks = BOOKS.filter(book => book[by].toLowerCase().includes(search));
-    console.log(searchedBooks);
+    let searchedBooks = BOOKS.filter(book => book[by].toLowerCase().includes(q)) || BOOKS;
     res.send(searchedBooks)
 
 })
