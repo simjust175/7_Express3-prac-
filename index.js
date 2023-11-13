@@ -37,18 +37,18 @@ app.post("/book", (req, res)=>{
 
 
 //Get all
-app.get("/books", (req, res)=>{
+app.get("/", (req, res)=>{
     res.send(BOOKS);
 });
 
 //Get with queries
-// app.get("/books", (req, res)=>{
-//     let limit = parseInt(req.query.limit, 10) || 10;
-//     let offset = parseInt(req.query.offset, 10) || 0;
-//     let limitedBooks = BOOKS.slice(offset, offset + limit);
-//     res.send(limitedBooks)
+app.get("/books", (req, res)=>{
+    let limit = parseInt(req.query.limit, 10) || 10;
+    let offset = parseInt(req.query.offset, 10) || 0;
+    let limitedBooks = BOOKS.slice(offset, offset + limit);
+    res.send(limitedBooks)
 
-// })
+})
 
 //GET with Search
 app.get("/books/search", (req, res)=>{
